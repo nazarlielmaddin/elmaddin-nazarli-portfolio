@@ -847,8 +847,10 @@ section{transition:background .4s var(--ease)}
           <a href="mailto:nazarlielmaddin@gmail.com" aria-label="Email" title="Email">&#9993;</a>
         </div>
       </div>
-      <form class="contact-form reveal-right delay-3" id="contactForm" novalidate data-netlify="true">
-        <input type="hidden" name="form-name" value="Contact Form">
+      <form class="contact-form reveal-right delay-3" id="contactForm" novalidate action="https://formsubmit.co/nazarlielmaddin@gmail.com" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="Portfolio Contact Form">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name">
@@ -1098,26 +1100,21 @@ function startTyping(){
     const email=document.getElementById('email');
     const message=document.getElementById('message');
     const v1=validateField(name),v2=validateField(email),v3=validateField(message);
-    if(v1&&v2&&v3){
-      const btn=contactForm.querySelector('button[type="submit"]');
-      btn.disabled=true; btn.textContent='Sending...';
-      try{
-        const fd=new FormData(contactForm);
-        const res=await fetch('/',{method:'POST',body:fd,headers:{Accept:'application/json'}});
-        if(res.ok||res.redirected){
-          showToast('Message sent! I\'ll get back to you soon.','success');
-          contactForm.reset();
-          [name,email,message].forEach(f=>f.classList.remove('success'));
-        }else{
-          showToast('Failed to send. Please email me directly.','error');
-        }
-      }catch{
-        showToast('Network error. Please email me directly.','error');
-      }
-      btn.disabled=false; btn.textContent='Send Message';
-    }else{
-      showToast('Please fix the errors and try again.','error');
+    if(!v1||!v2||!v3)return showToast('Please fix the errors and try again.','error');
+    const btn=contactForm.querySelector('button[type="submit"]');
+    btn.disabled=true; btn.textContent='Sending...';
+    try{
+      const fd=new FormData(contactForm);
+      const res=await fetch(contactForm.action,{method:'POST',body:fd});
+      if(res.ok){
+        showToast('Message sent! I\'ll get back to you soon.','success');
+        contactForm.reset();
+        [name,email,message].forEach(f=>f.classList.remove('success'));
+      }else showToast('Failed to send. Please email me directly.','error');
+    }catch{
+      showToast('Network error. Please email me directly.','error');
     }
+    btn.disabled=false; btn.textContent='Send Message';
   });
 })();
 
