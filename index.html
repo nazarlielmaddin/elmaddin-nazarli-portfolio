@@ -847,20 +847,21 @@ section{transition:background .4s var(--ease)}
           <a href="mailto:nazarlielmaddin@gmail.com" aria-label="Email" title="Email">&#9993;</a>
         </div>
       </div>
-      <form class="contact-form reveal-right delay-3" id="contactForm" novalidate>
+      <form class="contact-form reveal-right delay-3" id="contactForm" novalidate data-netlify="true">
+        <input type="hidden" name="form-name" value="Contact Form">
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" placeholder="Your name" required autocomplete="name">
+          <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name">
           <span class="form-error" id="nameError" role="alert"></span>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="your@email.com" required autocomplete="email">
+          <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email">
           <span class="form-error" id="emailError" role="alert"></span>
         </div>
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea id="message" placeholder="Write your message..." required rows="4"></textarea>
+          <textarea id="message" name="message" placeholder="Write your message..." required rows="4"></textarea>
           <span class="form-error" id="messageError" role="alert"></span>
         </div>
         <button type="submit" class="btn btn-primary" style="align-self:flex-start">Send Message</button>
@@ -1091,16 +1092,29 @@ function startTyping(){
       if(field.classList.contains('error'))validateField(field);
     });
   });
-  contactForm.addEventListener('submit',e=>{
+  contactForm.addEventListener('submit',async e=>{
     e.preventDefault();
     const name=document.getElementById('name');
     const email=document.getElementById('email');
     const message=document.getElementById('message');
     const v1=validateField(name),v2=validateField(email),v3=validateField(message);
     if(v1&&v2&&v3){
-      showToast('Message sent (demo) — this is a static portfolio. Reach me at nazarlielmaddin@gmail.com','success');
-      contactForm.reset();
-      [name,email,message].forEach(f=>f.classList.remove('success'));
+      const btn=contactForm.querySelector('button[type="submit"]');
+      btn.disabled=true; btn.textContent='Sending...';
+      try{
+        const fd=new FormData(contactForm);
+        const res=await fetch('/',{method:'POST',body:fd,headers:{Accept:'application/json'}});
+        if(res.ok||res.redirected){
+          showToast('Message sent! I\'ll get back to you soon.','success');
+          contactForm.reset();
+          [name,email,message].forEach(f=>f.classList.remove('success'));
+        }else{
+          showToast('Failed to send. Please email me directly.','error');
+        }
+      }catch{
+        showToast('Network error. Please email me directly.','error');
+      }
+      btn.disabled=false; btn.textContent='Send Message';
     }else{
       showToast('Please fix the errors and try again.','error');
     }
