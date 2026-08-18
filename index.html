@@ -82,9 +82,10 @@ nav.scrolled .nav-logo{font-size:16px}
 
 /* ── Hero ── */
 .hero{
-  min-height:100vh;display:flex;align-items:center;
+  height:100vh;height:100svh;min-height:100vh;min-height:100svh;
+  display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 50%,#0f2740 100%);
-  color:var(--white);position:relative;overflow:hidden;padding:140px 40px 80px;
+  color:var(--white);position:relative;overflow:hidden;padding:calc(var(--navH) + 8px) 40px 28px;
 }
 .hero-grid{
   display:flex;flex-direction:column;align-items:center;
@@ -93,20 +94,20 @@ nav.scrolled .nav-logo{font-size:16px}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
   background:var(--tealdim);color:var(--teal);font-size:13px;font-weight:600;
-  padding:8px 20px;border-radius:50px;margin:0 auto 48px;letter-spacing:.5px;
+  padding:8px 20px;border-radius:50px;margin:0 auto 24px;letter-spacing:.5px;
 }
-.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;line-height:1.15;letter-spacing:-.04em;margin-bottom:28px}
+.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;line-height:1.15;letter-spacing:-.04em;margin-bottom:16px}
 .hero h1 span{background:linear-gradient(135deg,var(--teal),#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--slate2);font-weight:400;margin-bottom:28px}
-.hero-tagline{font-size:clamp(.9rem,1.5vw,1.05rem);color:var(--slate);max-width:850px;line-height:1.9;margin-bottom:32px}
+.hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--slate2);font-weight:400;margin-bottom:16px}
+.hero-tagline{font-size:clamp(.9rem,1.5vw,1.05rem);color:var(--slate);max-width:850px;line-height:1.9;margin-bottom:20px}
 /* Hero photo */
-.hero-photo{position:relative;display:flex;justify-content:center;margin-bottom:40px}
+.hero-photo{position:relative;display:flex;justify-content:center;margin-bottom:20px}
 .hero-photo::before{content:'';position:absolute;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,191,.25) 0%,rgba(45,212,191,.05) 60%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:glowPulse 3s ease-in-out infinite;pointer-events:none}
 .hero-img{width:160px;height:160px;border-radius:50%;object-fit:cover;border:4px solid var(--teal);box-shadow:0 8px 32px rgba(45,212,191,.25);transition:all .5s var(--ease);position:relative;z-index:1}
 .hero-img:hover{transform:scale(1.05);box-shadow:0 12px 48px rgba(45,212,191,.4)}
 body.dark .hero-img{border-color:var(--teal);box-shadow:0 8px 32px rgba(45,212,191,.15)}
 @media(max-width:768px){.hero-img{width:130px;height:130px}}
-.hero-actions{display:flex;gap:20px;flex-wrap:wrap;margin-top:48px}
+.hero-actions{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px}
 .btn{
   display:inline-flex;align-items:center;gap:10px;padding:14px 32px;
   border-radius:50px;font-size:15px;font-weight:600;border:none;cursor:pointer;
@@ -117,13 +118,6 @@ body.dark .hero-img{border-color:var(--teal);box-shadow:0 8px 32px rgba(45,212,1
 .btn-outline{border:2px solid var(--teal);color:var(--teal);background:transparent}
 .btn-outline:hover{background:var(--tealdim);transform:translateY(-2px)}
 
-.scroll-indicator{
-  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--slate);font-size:11px;letter-spacing:2px;text-transform:uppercase;
-  animation:bounce 2s infinite;z-index:2;
-}
-.scroll-indicator .arrow{width:20px;height:20px;border-right:2px solid var(--slate);border-bottom:2px solid var(--slate);transform:rotate(45deg)}
-@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
 @keyframes heroUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
 @keyframes glowPulse{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
 .hero-anim{animation:heroUp .8s var(--ease) both}
@@ -378,7 +372,7 @@ section{transition:background .4s var(--ease)}
   .nav-links.open{transform:translateY(0);opacity:1;pointer-events:auto}
   .nav-links a{padding:14px 24px;border-bottom:1px solid rgba(255,255,255,.05)}
   .nav-hamburger{display:flex}
-  .hero{padding:100px 20px 60px;min-height:auto}
+  .hero{padding:calc(var(--navH) + 6px) 20px 16px}
   section{padding:64px 20px}
   .about-grid{gap:32px}
   .edu-grid,.scores-grid,.lang-grid{grid-template-columns:1fr}
@@ -389,6 +383,21 @@ section{transition:background .4s var(--ease)}
   .about-stats{grid-template-columns:1fr}
   .hero-actions{flex-direction:column}
   .btn{justify-content:center}
+}
+/* Short viewports: keep hero on one screen, no overlaps */
+@media(max-height:700px){
+  .hero{padding-top:calc(var(--navH) + 4px)}
+  .hero-img{width:112px;height:112px}
+  .hero-photo{margin-bottom:10px}
+  .hero-badge{margin-bottom:14px}
+  .hero h1{margin-bottom:8px;font-size:clamp(1.7rem,4.5vw,2.4rem)}
+  .hero-sub{margin-bottom:8px}
+  .hero-tagline{margin-bottom:10px;line-height:1.6;font-size:clamp(.82rem,1.6vw,.95rem)}
+  .hero-actions{margin-top:10px}
+}
+/* Extremely short viewports: let hero grow rather than clip content */
+@media(max-height:560px){
+  .hero{height:auto;min-height:100svh;padding-bottom:16px;overflow:visible}
 }
 
 /* ── Print ── */
@@ -555,11 +564,7 @@ section{transition:background .4s var(--ease)}
       </div>
   </div>
   </div>
-  <div class="scroll-indicator">
-    <span data-i18n="hero.scroll">Scroll</span>
-    <div class="arrow"></div>
-  </div>
-</section>
+  </section>
 
 <!-- ═══ About ═══ -->
 <section id="about" aria-label="About me">
